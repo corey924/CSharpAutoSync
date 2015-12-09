@@ -1,0 +1,18 @@
+c:\users\thor\documents\visual studio 2015\Projects\AutoSync\AutoSync\bin\Debug\AutoSync.exe.config
+c:\users\thor\documents\visual studio 2015\Projects\AutoSync\AutoSync\bin\Debug\AutoSync.exe
+c:\users\thor\documents\visual studio 2015\Projects\AutoSync\AutoSync\bin\Debug\AutoSync.pdb
+c:\users\thor\documents\visual studio 2015\Projects\AutoSync\AutoSync\obj\Debug\AutoSync.csprojResolveAssemblyReference.cache
+c:\users\thor\documents\visual studio 2015\Projects\AutoSync\AutoSync\obj\Debug\AutoSync.frmMain.resources
+c:\users\thor\documents\visual studio 2015\Projects\AutoSync\AutoSync\obj\Debug\AutoSync.Properties.Resources.resources
+c:\users\thor\documents\visual studio 2015\Projects\AutoSync\AutoSync\obj\Debug\AutoSync.csproj.GenerateResource.Cache
+c:\users\thor\documents\visual studio 2015\Projects\AutoSync\AutoSync\obj\Debug\AutoSync.exe
+c:\users\thor\documents\visual studio 2015\Projects\AutoSync\AutoSync\obj\Debug\AutoSync.pdb
+D:\Code\WinForm\autosync\AutoSync\AutoSync\bin\Debug\AutoSync.exe.config
+D:\Code\WinForm\autosync\AutoSync\AutoSync\bin\Debug\AutoSync.exe
+D:\Code\WinForm\autosync\AutoSync\AutoSync\bin\Debug\AutoSync.pdb
+D:\Code\WinForm\autosync\AutoSync\AutoSync\obj\Debug\AutoSync.csprojResolveAssemblyReference.cache
+D:\Code\WinForm\autosync\AutoSync\AutoSync\obj\Debug\AutoSync.frmMain.resources
+D:\Code\WinForm\autosync\AutoSync\AutoSync\obj\Debug\AutoSync.Properties.Resources.resources
+D:\Code\WinForm\autosync\AutoSync\AutoSync\obj\Debug\AutoSync.csproj.GenerateResource.Cache
+D:\Code\WinForm\autosync\AutoSync\AutoSync\obj\Debug\AutoSync.exe
+D:\Code\WinForm\autosync\AutoSync\AutoSync\obj\Debug\AutoSync.pdb
