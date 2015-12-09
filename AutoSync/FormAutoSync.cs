@@ -1,27 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using System.Diagnostics;
 
 namespace AutoSync
 {
-  public partial class frmMain : Form
+  public partial class Main : Form
   {
-    public frmMain()
+    public Main()
     {
       InitializeComponent();
     }
 
-    private void frmMain_Load(object sender, EventArgs e)
+    private void Main_Load(object sender, EventArgs e)
     {
       comboBox_Delay.SelectedIndex = 0;
+    }
+
+    private void ButtonSync_Click(object sender, EventArgs e)
+    {
+      if (Directory.Exists(TextBox_SourcePath.Text) || Directory.Exists(TextBox_TargetPath.Text))
+      {
+        int timerInterval = 1;
+        if (Convert.ToInt16(comboBox_Delay.SelectedItem) != 0) timerInterval = Convert.ToInt16(comboBox_Delay.SelectedItem) * 1000 * 60;
+        Timer_AutoSync.Interval = timerInterval;
+        ButtonSyncStatus();
+      }
+      else
+      {
+        Timer_AutoSync.Enabled = false;
+        MessageBox.Show("請選擇正確目錄路徑。", "設定");
+      }
+    }
+
+    private void Button_SourcePath_Click(object sender, EventArgs e)
+    {
+      if (FolderBrowserDialog_Path.ShowDialog() == DialogResult.OK)
+      {
+        TextBox_SourcePath.Text = FolderBrowserDialog_Path.SelectedPath;
+      }
+    }
+
+    private void Button_TargetPath_Click(object sender, EventArgs e)
+    {
+      if (FolderBrowserDialog_Path.ShowDialog() == DialogResult.OK)
+      {
+        TextBox_TargetPath.Text = FolderBrowserDialog_Path.SelectedPath;
+      }
     }
 
     private void DirectoryCopy(string sourceDirName, string destDirName, string extensionDirName, bool copySubDirs)
@@ -29,7 +55,7 @@ namespace AutoSync
       //來源路徑
       DirectoryInfo dir = new DirectoryInfo(sourceDirName);
 
-      //路徑如果有問題中斷
+      //來源路徑如果有問題
       if (!dir.Exists)
       {
         throw new DirectoryNotFoundException(
@@ -77,22 +103,6 @@ namespace AutoSync
       }
     }
 
-    private void ButtonSync_Click(object sender, EventArgs e)
-    {
-      if (Directory.Exists(TextBox_SourcePath.Text) || Directory.Exists(TextBox_TargetPath.Text))
-      {
-        int timerInterval = 1;
-        if (Convert.ToInt16(comboBox_Delay.SelectedItem) != 0) timerInterval = Convert.ToInt16(comboBox_Delay.SelectedItem) * 1000 * 60;
-        Timer_AutoSync.Interval = timerInterval;
-        ButtonSyncStatus();
-      }
-      else
-      {
-        Timer_AutoSync.Enabled = false;
-        MessageBox.Show("請選擇正確目錄路徑。", "設定問題");
-      }
-    }
-
     private void ButtonSyncStatus()
     {
       if (Timer_AutoSync.Enabled)
@@ -133,22 +143,6 @@ namespace AutoSync
       }
     }
 
-    private void Button_SourcePath_Click(object sender, EventArgs e)
-    {
-      if (FolderBrowserDialog_Path.ShowDialog() == DialogResult.OK)
-      {
-        TextBox_SourcePath.Text = FolderBrowserDialog_Path.SelectedPath;
-      }
-    }
-
-    private void Button_TargetPath_Click(object sender, EventArgs e)
-    {
-      if (FolderBrowserDialog_Path.ShowDialog() == DialogResult.OK)
-      {
-        TextBox_TargetPath.Text = FolderBrowserDialog_Path.SelectedPath;
-      }
-    }
-
     private void InputLog(string message)
     {
       textBoxLog.Text += "[" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "] " + message + Environment.NewLine;
@@ -158,8 +152,28 @@ namespace AutoSync
     private void Timer_AutoSync_Tick(object sender, EventArgs e)
     {
       DirectoryCopy(TextBox_SourcePath.Text, TextBox_TargetPath.Text, textBoxExtension.Text, true);
-
       if (comboBox_Delay.SelectedIndex == 0) ButtonSyncStatus();
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private void Main_Resize(object sender, EventArgs e)
+    {
+      if (this.WindowState == FormWindowState.Minimized)
+      {
+        this.ShowInTaskbar = false;
+        this.NotifyIconNarrow.Visible = true;
+      }
+    }
+
+    private void NotifyIconNarrow_MouseDoubleClick(object sender, MouseEventArgs e)
+    {
+      if (e.Button == MouseButtons.Left)
+      {
+        this.Show();
+        this.WindowState = FormWindowState.Normal;
+        this.ShowInTaskbar = true;
+      }
     }
   }
 }

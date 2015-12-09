@@ -1,6 +1,6 @@
 ﻿namespace AutoSync
 {
-    partial class frmMain
+    partial class Main
     {
         /// <summary>
         /// 設計工具所需的變數。
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
       this.components = new System.ComponentModel.Container();
-      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
+      System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
       this.Button_Sync = new System.Windows.Forms.Button();
       this.Label_SourcePath = new System.Windows.Forms.Label();
       this.Label_TargetPath = new System.Windows.Forms.Label();
@@ -45,6 +45,7 @@
       this.textBoxExtension = new System.Windows.Forms.TextBox();
       this.labelExtension = new System.Windows.Forms.Label();
       this.textBoxLog = new System.Windows.Forms.TextBox();
+      this.NotifyIconNarrow = new System.Windows.Forms.NotifyIcon(this.components);
       this.SuspendLayout();
       // 
       // Button_Sync
@@ -187,7 +188,14 @@
       this.textBoxLog.Size = new System.Drawing.Size(433, 88);
       this.textBoxLog.TabIndex = 12;
       // 
-      // frmMain
+      // NotifyIconNarrow
+      // 
+      this.NotifyIconNarrow.Icon = ((System.Drawing.Icon)(resources.GetObject("NotifyIconNarrow.Icon")));
+      this.NotifyIconNarrow.Text = "檔案自動同步";
+      this.NotifyIconNarrow.Visible = true;
+      this.NotifyIconNarrow.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIconNarrow_MouseDoubleClick);
+      // 
+      // Main
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -207,9 +215,10 @@
       this.Controls.Add(this.Label_SourcePath);
       this.Controls.Add(this.Button_Sync);
       this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-      this.Name = "frmMain";
+      this.Name = "Main";
       this.Text = "檔案自動同步";
-      this.Load += new System.EventHandler(this.frmMain_Load);
+      this.Load += new System.EventHandler(this.Main_Load);
+      this.Resize += new System.EventHandler(this.Main_Resize);
       this.ResumeLayout(false);
       this.PerformLayout();
 
@@ -232,6 +241,7 @@
     private System.Windows.Forms.TextBox textBoxExtension;
     private System.Windows.Forms.Label labelExtension;
     private System.Windows.Forms.TextBox textBoxLog;
+    private System.Windows.Forms.NotifyIcon NotifyIconNarrow;
   }
 }
 
