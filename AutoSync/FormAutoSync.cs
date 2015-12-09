@@ -15,7 +15,7 @@ namespace AutoSync
 
     private void Main_Load(object sender, EventArgs e)
     {
-      comboBox_Delay.SelectedIndex = 0;
+      ComboBox_Delay.SelectedIndex = 0;
     }
 
     private void ButtonSync_Click(object sender, EventArgs e)
@@ -23,7 +23,7 @@ namespace AutoSync
       if (Directory.Exists(TextBox_SourcePath.Text) || Directory.Exists(TextBox_TargetPath.Text))
       {
         int timerInterval = 1;
-        if (Convert.ToInt16(comboBox_Delay.SelectedItem) != 0) timerInterval = Convert.ToInt16(comboBox_Delay.SelectedItem) * 1000 * 60;
+        if (Convert.ToInt16(ComboBox_Delay.SelectedItem) != 0) timerInterval = Convert.ToInt16(ComboBox_Delay.SelectedItem) * 1000 * 60;
         Timer_AutoSync.Interval = timerInterval;
         ButtonSyncStatus();
       }
@@ -52,54 +52,62 @@ namespace AutoSync
 
     private void DirectoryCopy(string sourceDirName, string destDirName, string extensionDirName, bool copySubDirs)
     {
-      //來源路徑
-      DirectoryInfo dir = new DirectoryInfo(sourceDirName);
-
-      //來源路徑如果有問題
-      if (!dir.Exists)
+      try
       {
-        throw new DirectoryNotFoundException(
-            "Source directory does not exist or could not be found: "
-            + sourceDirName);
-      }
+        //來源路徑
+        DirectoryInfo dir = new DirectoryInfo(sourceDirName);
 
-      DirectoryInfo[] dirs = dir.GetDirectories();
-
-      //路徑目錄
-      if (!Directory.Exists(destDirName)) Directory.CreateDirectory(destDirName);
-
-      //參數載入
-      int countFile = 0;
-      FileInfo[] sourceFiles = dir.GetFiles();
-      DirectoryInfo Targetdir = new DirectoryInfo(destDirName);
-      FileInfo[] targetFiles = Targetdir.GetFiles();
-      List<FileInfo> targetFileList = new List<FileInfo>();
-      List<string> extensionList = new List<string>();
-      extensionList.AddRange(extensionDirName.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries));
-
-      foreach (FileInfo target in targetFiles) targetFileList.Add(target);
-      foreach (FileInfo source in sourceFiles)
-      {
-        //副檔名篩選
-        if (extensionList.Contains(source.Extension.ToLower()))
+        //來源路徑如果有問題
+        if (!dir.Exists)
         {
-          if (targetFileList.Any(o => o.Name == source.Name && o.LastWriteTime == source.LastWriteTime)) continue;
-          string temppath = Path.Combine(destDirName, source.Name);
-          source.CopyTo(temppath, true);
-          countFile++;
+          throw new DirectoryNotFoundException(
+              "Source directory does not exist or could not be found: "
+              + sourceDirName);
+        }
+
+        DirectoryInfo[] dirs = dir.GetDirectories();
+
+        //路徑目錄
+        if (!Directory.Exists(destDirName)) Directory.CreateDirectory(destDirName);
+
+        //參數載入
+        int countFile = 0;
+        FileInfo[] sourceFiles = dir.GetFiles();
+        DirectoryInfo Targetdir = new DirectoryInfo(destDirName);
+        FileInfo[] targetFiles = Targetdir.GetFiles();
+        List<FileInfo> targetFileList = new List<FileInfo>();
+        List<string> extensionList = new List<string>();
+        extensionList.AddRange(extensionDirName.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries));
+
+        foreach (FileInfo target in targetFiles) targetFileList.Add(target);
+        foreach (FileInfo source in sourceFiles)
+        {
+          //副檔名篩選
+          if (extensionList.Contains(source.Extension.ToLower()))
+          {
+            if (targetFileList.Any(o => o.Name == source.Name && o.LastWriteTime == source.LastWriteTime)) continue;
+            string temppath = Path.Combine(destDirName, source.Name);
+            source.CopyTo(temppath, true);
+            countFile++;
+          }
+        }
+
+        InputLog("已成功同步 " + countFile + " 個檔案。");
+
+        //遞迴
+        if (copySubDirs)
+        {
+          foreach (DirectoryInfo subdir in dirs)
+          {
+            string temppath = Path.Combine(destDirName, subdir.Name);
+            DirectoryCopy(subdir.FullName, temppath, extensionDirName, copySubDirs);
+          }
         }
       }
-
-      InputLog("已成功同步 " + countFile + " 個檔案。");
-
-      //遞迴
-      if (copySubDirs)
+      catch(Exception ex)
       {
-        foreach (DirectoryInfo subdir in dirs)
-        {
-          string temppath = Path.Combine(destDirName, subdir.Name);
-          DirectoryCopy(subdir.FullName, temppath, extensionDirName, copySubDirs);
-        }
+        ButtonSyncStatus();
+        MessageBox.Show(ex.Message, "警告");
       }
     }
 
@@ -109,20 +117,20 @@ namespace AutoSync
       {
         Timer_AutoSync.Enabled = false;
 
-        TextBox_SourcePath.Enabled = true;
+        //TextBox_SourcePath.Enabled = true;
         Button_SourcePath.Enabled = true;
-        TextBox_TargetPath.Enabled = true;
+        //TextBox_TargetPath.Enabled = true;
         Button_TargetPath.Enabled = true;
-        textBoxExtension.Enabled = true;
-        comboBox_Delay.Enabled = true;
+        TextBox_Extension.Enabled = true;
+        ComboBox_Delay.Enabled = true;
 
         Button_Sync.Text = "開始自動同步";
         InputLog("停止同步待命。");
       }
       else
       {
-        string Message = "本程序即將在 " + Convert.ToInt16(comboBox_Delay.SelectedItem) + " 分鐘後開始自動同步。";
-        if (comboBox_Delay.SelectedIndex <= 0) Message = "是否僅執行一次同步？";
+        string Message = "本程序即將在 " + Convert.ToInt16(ComboBox_Delay.SelectedItem) + " 分鐘後開始自動同步。";
+        if (ComboBox_Delay.SelectedIndex <= 0) Message = "是否僅執行一次同步？";
 
         DialogResult ResultSync = MessageBox.Show(Message, "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -130,12 +138,12 @@ namespace AutoSync
         {
           Timer_AutoSync.Enabled = true;
 
-          TextBox_SourcePath.Enabled = false;
+          //TextBox_SourcePath.Enabled = false;
           Button_SourcePath.Enabled = false;
-          TextBox_TargetPath.Enabled = false;
+          //TextBox_TargetPath.Enabled = false;
           Button_TargetPath.Enabled = false;
-          textBoxExtension.Enabled = false;
-          comboBox_Delay.Enabled = false;
+          TextBox_Extension.Enabled = false;
+          ComboBox_Delay.Enabled = false;
 
           Button_Sync.Text = "停止自動同步";
           InputLog("自動同步待命...");
@@ -145,14 +153,14 @@ namespace AutoSync
 
     private void InputLog(string message)
     {
-      textBoxLog.Text += "[" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "] " + message + Environment.NewLine;
-      textBoxLog.ScrollToCaret();
+      TextBox_Log.Text += "[" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "] " + message + Environment.NewLine;
+      TextBox_Log.ScrollToCaret();
     }
 
     private void Timer_AutoSync_Tick(object sender, EventArgs e)
     {
-      DirectoryCopy(TextBox_SourcePath.Text, TextBox_TargetPath.Text, textBoxExtension.Text, true);
-      if (comboBox_Delay.SelectedIndex == 0) ButtonSyncStatus();
+      DirectoryCopy(TextBox_SourcePath.Text, TextBox_TargetPath.Text, TextBox_Extension.Text, true);
+      if (ComboBox_Delay.SelectedIndex == 0) ButtonSyncStatus();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
