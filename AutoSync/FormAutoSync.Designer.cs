@@ -157,7 +157,7 @@
       // 
       // Timer_AutoSync
       // 
-      this.Timer_AutoSync.Interval = 600000;
+      this.Timer_AutoSync.Interval = 3600000;
       this.Timer_AutoSync.Tick += new System.EventHandler(this.Timer_AutoSync_Tick);
       // 
       // TextBox_Extension
