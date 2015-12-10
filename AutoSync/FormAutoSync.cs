@@ -22,7 +22,7 @@ namespace AutoSync
     {
       if (Directory.Exists(TextBox_SourcePath.Text) || Directory.Exists(TextBox_TargetPath.Text))
       {
-        int timerInterval = 1;
+        int timerInterval = 3600000;
         if (Convert.ToInt16(ComboBox_Delay.SelectedItem) != 0) timerInterval = Convert.ToInt16(ComboBox_Delay.SelectedItem) * 1000 * 60;
         Timer_AutoSync.Interval = timerInterval;
         ButtonSyncStatus();
